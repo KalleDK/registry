@@ -43,7 +43,7 @@ PACKAGES = $(ARCH_DIRS:%=%/Packages)
 PACKAGES_GZ = $(PACKAGES:%=%.gz)
 
 .PHONY: all
-all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease ${REPO_DIR}/index.md ${REPO_DIR}/${PUBLIC_KEY_NAME}.gpg
+all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease ${REPO_DIR}/index.md ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg
 	echo $(PACKAGES_GZ)
 
 .PHONY: clean
