@@ -136,7 +136,7 @@ ${REPO_DIR}/index.md: ${REPO_DIR}
 	echo "" >> $@
 	echo "\`\`\`bash" >> $@
 	echo "# Install key" >> $@
-	echo "curl '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.gpg' | sudo tee /usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg" >> $@
+	echo "curl '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.gpg' | sudo gpg --dearmor -o ${DEB_PUBLIC_KEY_NAME}.gpg" >> $@
 	echo "" >> $@
 	echo "# Install repo" >> $@
 	echo "echo \"deb [arch=amd64 signed-by=/usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg] ${DEB_REPO_URL} stable main\" | sudo tee /etc/apt/sources.list.d/${DEB_REPO_NAME}.list" >> $@
