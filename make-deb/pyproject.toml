@@ -1,0 +1,7 @@
+[project]
+name = "make-deb"
+version = "0.1.0"
+description = "Make Deb Repository"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
