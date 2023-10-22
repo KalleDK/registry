@@ -34,7 +34,7 @@ jobs:
         uses: KalleDK/actions-apkrepo@v0.0.39
         id: build_apkrepo
         with:
-          pkg_path: apk
+          pkgs_path: apk
           abuild_packager: ${{ vars.ABUILD_PACKAGER }}
           abuild_key_name: ${{ vars.ABUILD_KEY_NAME }}
           abuild_key_priv: ${{ secrets.ABUILD_KEY_PRIV }}
