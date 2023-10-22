@@ -30,10 +30,23 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
+      - name: Build APK Repo
+        uses: KalleDK/actions-apkrepo@v0.0.31
+        id: build_apkrepo
+        with:
+          abuild_packager: ${{ vars.ABUILD_PACKAGER }}
+          abuild_key_name: ${{ vars.ABUILD_KEY_NAME }}
+          abuild_key_priv: ${{ secrets.ABUILD_KEY_PRIV }}
+          abuild_key_pub: ${{ vars.ABUILD_KEY_PUB }}
+          abuild_repo_url: https://kalledk.github.io/registry/apk
+      - name: Combine
+        run: |
+          mkdir -p ./_sitesource
+          cp -r "${{ steps.build_apkrepo.outputs.repo_path }}" ./_sitesource/apk
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
+          source: ./_sitesource
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
