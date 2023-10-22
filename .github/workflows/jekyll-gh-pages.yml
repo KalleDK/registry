@@ -39,6 +39,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
+      - name: Move packages
+        run: |
+          mkdir -p apk/x86_64
+          for f in $(find pkgs -wholename "pkgs/*/apk/x86_64/*" -type d); do cp -r "$f" apk/x86_64/$(basename $f) ; done
+          mkdir -p deb
+          for f in $(find pkgs -name "*.deb" -type f); do cp "$f" deb/$(basename $f) ; done
       - name: Build APK Repo
         uses: KalleDK/actions-apkrepo@v0.0.42
         id: build_apkrepo
