@@ -43,7 +43,7 @@ PACKAGES = $(ARCH_DIRS:%=%/Packages)
 PACKAGES_GZ = $(PACKAGES:%=%.gz)
 
 .PHONY: all
-all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease
+all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease ${REPO_DIR}/index.md ${REPO_DIR}/${PUBLIC_KEY_NAME}.gpg
 	echo $(PACKAGES_GZ)
 
 .PHONY: clean
@@ -126,3 +126,19 @@ $(STABLE_DIR)/Release.gpg: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
 
 $(STABLE_DIR)/InRelease: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
 	cat $< | GNUPGHOME=$(KEY_DIR) gpg --default-key "$(DEB_KEY_SIGNER)" -abs --clearsign > $@
+
+${REPO_DIR}/${PUBLIC_KEY_NAME}.gpg: ${REPO_DIR}
+	printf -- "$(DEB_KEY_PUB)" | base64 -d > $@
+
+${REPO_DIR}/index.md: ${REPO_DIR}
+	echo -n '' > $@
+	echo "# Debian Repository" >> $@
+	echo "" >> $@
+	echo "\`\`\`bash" >> $@
+	echo "# Install key" >> $@
+	echo "curl '${DEB_REPO_URL}/${PUBLIC_KEY_NAME}.gpg' | sudo tee /etc/apk/keys/${PUBLIC_KEY_NAME}.gpg" >> $@
+	echo "" >> $@
+	echo "# Install repo" >> $@
+	echo "echo \"deb [arch=amd64 signed-by=/usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg] ${DEB_REPO_URL} stable main\" | sudo tee /etc/apt/sources.list.d/${DEB_REPO_NAME}.list" >> $@
+	echo "" >> $@
+	echo "\`\`\`" >> $@

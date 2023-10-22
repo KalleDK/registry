@@ -30,6 +30,9 @@ jobs:
     env:
       DEB_KEY_SIGNER: ${{ vars.DEB_KEY_SIGNER }}
       DEB_KEY_PRIV: ${{ secrets.DEB_KEY_PRIV }}
+      DEB_PUBLIC_KEY_NAME: kalledk-archive
+      DEB_REPO_URL: https://kalledk.github.io/registry/deb
+      DEB_REPO_NAME: kalledk
     steps:
       - name: Checkout
         uses: actions/checkout@v3
