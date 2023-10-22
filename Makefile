@@ -122,7 +122,7 @@ $(KEY_DIR)/trustdb.gpg: $(KEY_DIR)
 	printf -- "$(DEB_KEY_PRIV)" | base64 -d | GNUPGHOME=$(KEY_DIR) gpg --import
 
 $(STABLE_DIR)/Release.gpg: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
-	cat $< | gpg --default-key "$(DEB_KEY_SIGNER)" -abs > $@
+	cat $< | GNUPGHOME=$(KEY_DIR) gpg --default-key "$(DEB_KEY_SIGNER)" -abs > $@
 
 $(STABLE_DIR)/InRelease: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
-	cat $< | gpg --default-key "$(DEB_KEY_SIGNER)" -abs --clearsign > $@
+	cat $< | GNUPGHOME=$(KEY_DIR) gpg --default-key "$(DEB_KEY_SIGNER)" -abs --clearsign > $@
