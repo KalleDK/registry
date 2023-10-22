@@ -27,6 +27,9 @@ jobs:
     environment:
       name: github-pages
     runs-on: ubuntu-latest
+    env:
+      DEB_KEY_SIGNER: ${{ vars.DEB_KEY_SIGNER }}
+      DEB_KEY_PRIV: ${{ secrets.DEB_KEY_PRIV }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,9 +45,13 @@ jobs:
           abuild_key_priv: ${{ secrets.ABUILD_KEY_PRIV }}
           abuild_key_pub: ${{ vars.ABUILD_KEY_PUB }}
           abuild_repo_url: https://kalledk.github.io/registry/apk
+      - name: Build DEB Repo
+        run: |
+          make
       - name: Combine
         run: |
           mkdir -p ./_sitesource
+          cp -r .deb/repo ./_sitesource/deb
           cp -r "${{ steps.build_apkrepo.outputs.repo_path }}" ./_sitesource/apk
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
