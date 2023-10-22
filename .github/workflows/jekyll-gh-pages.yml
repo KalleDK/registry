@@ -31,7 +31,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Build APK Repo
-        uses: KalleDK/actions-apkrepo@v0.0.40
+        uses: KalleDK/actions-apkrepo@v0.0.41
         id: build_apkrepo
         with:
           pkgs_path: apk
