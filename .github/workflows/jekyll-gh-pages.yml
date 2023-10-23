@@ -45,7 +45,7 @@ jobs:
           for f in $(find pkgs -name "*.deb" -type f); do cp "$f" deb/$(basename $f) ; done
           find deb
       - name: Build APK Repo
-        uses: KalleDK/actions-apkrepo@v0.0.44
+        uses: KalleDK/actions-apkrepo@v0.0.45
         id: build_apkrepo
         with:
           pkgs_path: pkgs
@@ -62,6 +62,12 @@ jobs:
           mkdir -p ./_sitesource
           cp -r .deb/repo ./_sitesource/deb
           cp -r "${{ steps.build_apkrepo.outputs.repo_path }}" ./_sitesource/apk
+          echo -n '' >  ./_sitesource/index.md
+          echo "# APK Registry" >> ./_sitesource/index.md
+          echo "" >> ./_sitesource/index.md
+          echo "* [apk](apk)" >> ./_sitesource/index.md
+          echo "* [deb](deb)" >> ./_sitesource/index.md
+          echo "" >> ./_sitesource/index.md
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
