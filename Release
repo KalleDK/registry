@@ -1,0 +1,12 @@
+Origin: KalleDK
+Label: Debian
+Suite: stable
+Codename: bookworm
+Version: 12.2
+Architectures: 
+Components: main
+Description: Repository for KalleDK releases
+Date: Mon, 23 Oct 2023 12:24:03 +0000
+MD5Sum:
+SHA1:
+SHA256:

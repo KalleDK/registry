@@ -43,7 +43,7 @@ PACKAGES = $(ARCH_DIRS:%=%/Packages)
 PACKAGES_GZ = $(PACKAGES:%=%.gz)
 
 .PHONY: all
-all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease ${REPO_DIR}/index.md ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg
+all: $(STABLE_DIR)/Release.gpg $(STABLE_DIR)/InRelease ${REPO_DIR}/index.md ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.asc
 	echo $(PACKAGES_GZ)
 
 .PHONY: clean
@@ -128,13 +128,18 @@ $(STABLE_DIR)/InRelease: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
 ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg: ${REPO_DIR}
 	printf -- "$(DEB_KEY_PUB)" | base64 -d > $@
 
+${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.asc: ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg
+	cat $< | gpg --dearmor -o $@
+
 ${REPO_DIR}/index.md: ${REPO_DIR}
 	echo -n '' > $@
 	echo "# Debian Repository" >> $@
 	echo "" >> $@
 	echo "\`\`\`bash" >> $@
 	echo "# Install key" >> $@
-	echo "curl '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.gpg' | sudo gpg --dearmor -o /usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg" >> $@
+	echo "curl '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.asc' | sudo gpg --dearmor -o /usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg" >> $@
+	echo "sudo curl -o /usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.gpg'" >> $@
+	echo "sudo curl -o /usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.asc '${DEB_REPO_URL}/${DEB_PUBLIC_KEY_NAME}.asc'" >> $@
 	echo "" >> $@
 	echo "# Install repo" >> $@
 	echo "echo \"deb [arch=amd64 signed-by=/usr/share/keyrings/${DEB_PUBLIC_KEY_NAME}.gpg] ${DEB_REPO_URL} stable main\" | sudo tee /etc/apt/sources.list.d/${DEB_REPO_NAME}.list" >> $@
