@@ -24,9 +24,9 @@ ARM64_PACKAGES := $(AMD64_BINARY)/Packages
 I386_BINARY := $(STABLE_DIR)/main/binary-i386
 I386_PACKAGES := $(I386_BINARY)/Packages
 
-HAS_AMD != dpkg-scanpackages --arch amd64 deb | wc -l
-HAS_ARM64 != dpkg-scanpackages --arch arm64 deb | wc -l
-HAS_I386 != dpkg-scanpackages --arch i386 deb | wc -l
+HAS_AMD != dpkg-scanpackages --arch amd64 $(PKGS_PATH) | wc -l
+HAS_ARM64 != dpkg-scanpackages --arch arm64 $(PKGS_PATH) | wc -l
+HAS_I386 != dpkg-scanpackages --arch i386 $(PKGS_PATH) | wc -l
 
 ifneq ($(HAS_ARM64), 0)
 ARCHS += arm64
@@ -64,8 +64,6 @@ $(REPO_POOL): $(REPO_DIR)
 
 $(STABLE_DIR): $(REPO_DIR)
 	mkdir -p $@
-
-
 
 $(REPO_POOL)/%.deb: $(PKGS_PATH)/%.deb $(REPO_POOL)
 	cp "$<" "$@"

@@ -41,9 +41,6 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Move packages
         run: |
-          mkdir -p apk/x86_64
-          for f in $(find pkgs -wholename "pkgs/*/apk/x86_64/*.apk" -type f); do cp -r "$f" apk/x86_64/$(basename $f) ; done
-          find apk
           mkdir -p deb
           for f in $(find pkgs -name "*.deb" -type f); do cp "$f" deb/$(basename $f) ; done
           find deb
@@ -51,7 +48,7 @@ jobs:
         uses: KalleDK/actions-apkrepo@v0.0.43
         id: build_apkrepo
         with:
-          pkgs_path: apk
+          pkgs_path: pkgs
           abuild_packager: ${{ vars.ABUILD_PACKAGER }}
           abuild_key_name: ${{ vars.ABUILD_KEY_NAME }}
           abuild_key_priv: ${{ secrets.ABUILD_KEY_PRIV }}
