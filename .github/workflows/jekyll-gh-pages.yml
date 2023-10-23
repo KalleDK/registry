@@ -63,7 +63,7 @@ jobs:
           cp -r .deb/repo ./_sitesource/deb
           cp -r "${{ steps.build_apkrepo.outputs.repo_path }}" ./_sitesource/apk
           echo -n '' >  ./_sitesource/index.md
-          echo "# APK Registry" >> ./_sitesource/index.md
+          echo "# Registries" >> ./_sitesource/index.md
           echo "" >> ./_sitesource/index.md
           echo "* [apk](apk)" >> ./_sitesource/index.md
           echo "* [deb](deb)" >> ./_sitesource/index.md
