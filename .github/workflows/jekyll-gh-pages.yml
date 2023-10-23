@@ -43,8 +43,10 @@ jobs:
         run: |
           mkdir -p apk/x86_64
           for f in $(find pkgs -wholename "pkgs/*/apk/x86_64/*.apk" -type f); do cp -r "$f" apk/x86_64/$(basename $f) ; done
+          find apk
           mkdir -p deb
           for f in $(find pkgs -name "*.deb" -type f); do cp "$f" deb/$(basename $f) ; done
+          find deb
       - name: Build APK Repo
         uses: KalleDK/actions-apkrepo@v0.0.43
         id: build_apkrepo
