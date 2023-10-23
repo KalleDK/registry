@@ -125,10 +125,10 @@ $(STABLE_DIR)/Release.gpg: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
 $(STABLE_DIR)/InRelease: $(STABLE_DIR)/Release $(KEY_DIR)/trustdb.gpg
 	cat $< | GNUPGHOME=$(KEY_DIR) gpg --default-key "$(DEB_KEY_SIGNER)" -abs --clearsign > $@
 
-${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg: ${REPO_DIR}
+${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.asc: ${REPO_DIR}
 	printf -- "$(DEB_KEY_PUB)" | base64 -d > $@
 
-${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.asc: ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg
+${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.gpg: ${REPO_DIR}/${DEB_PUBLIC_KEY_NAME}.asc
 	cat $< | gpg --dearmor -o $@
 
 ${REPO_DIR}/index.md: ${REPO_DIR}
