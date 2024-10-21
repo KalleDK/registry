@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Fetcher Configuration Schema",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "license": {
+            "type": "string"
+        },
+        "arch": {
+            "type": "string"
+        },
+        "url": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "maintainer": {
+            "type": "string"
+        },
+        "bindir": {
+            "type": "string",
+            "default": "/usr/bin"
+        },
+        "binaries": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "release": {
+            "type": "integer",
+            "default": 1,
+            "description": "The release number of the debian package"
+        },
+        "gh_repo": {
+            "type": "string",
+            "description": "The GitHub repository to fetch data from",
+            "examples": ["starship/starship"]
+        },
+        "gh_asset_regex": {
+            "type": "string",
+            "description": "Regex of asset name to download",
+            "examples": ["starship-x86_64-unknown-linux-gnu\\.tar\\.gz"]
+        }
+    },
+    "additionalProperties": false
+}

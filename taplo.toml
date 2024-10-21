@@ -1,0 +1,5 @@
+include = ["pkgs/**/fetcher.toml"]
+
+[schema]
+path = "./fetcher/fetcher-schema.json"
+enabled = true
