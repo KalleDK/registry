@@ -36,9 +36,6 @@ git commit -m "msg"
 
 git push
 
-git checkout repo
+git fetch && git checkout repo && git reset --hard origin/repo && ./squash.sh && git push -f && git checkout main
 
-./squash.sh
-
-git push -f
 ```
