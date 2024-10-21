@@ -1,0 +1,12 @@
+gh_repo = "starship/starship"
+name="starship"
+license="ISC"
+arch="x86_64"
+url="https://starship.rs"
+description = "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+maintainer = "The Starship Contributors"
+binaries = ["starship"]
+bindir = "/usr/local/bin"
+gh_asset_regex = "^starship-x86_64-unknown-linux-musl.tar.gz$"
+strip_components = 0
+pkgtypes = "apk"

@@ -1,0 +1,12 @@
+gh_repo = "hairyhenderson/gomplate"
+name="gomplate"
+license="ISC"
+arch="x86_64"
+url="https://gomplate.ca"
+description = "A flexible command-line tool for template rendering."
+maintainer = "Hairy Henderson"
+binaries = ["gomplate"]
+bindir = "/usr/local/bin"
+gh_asset_regex = "^gomplate_linux-amd64$"
+gh_asset_remove_regex = "_linux-amd64$"
+pkgtypes = "apk"

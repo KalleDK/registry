@@ -1,0 +1,14 @@
+gh_repo = "gitea/tea"
+name="tea"
+license="MIT"
+arch="x86_64"
+url="https://gitea.com/gitea/tea"
+description = "A command-line tool for managing Gitea instances and repositories."
+maintainer = "The Gitea Contributors"
+binaries = ["tea"]
+bindir = "/usr/local/bin"
+gh_asset_remove_regex = "-[0-9]+\\.[0-9]+\\.[0-9]+-linux-amd64$"
+gh_provider = "gitea"
+gh_asset_regex = "^tea-.*-linux-amd64.xz$"
+strip_components = 1
+pkgtypes = "deb"

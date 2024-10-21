@@ -1,0 +1,303 @@
+{
+  "data": {
+    "url": "https://gitea.com/api/v1/repos/gitea/tea/releases/856040",
+    "id": 856040,
+    "tag_name": "v0.14.0",
+    "target_commitish": "63bc90ea521e54a8c9636a1216a2931ecad66547",
+    "name": "v0.14.0",
+    "draft": false,
+    "prerelease": false,
+    "created_at": "2026-04-17T18:58:24Z",
+    "published_at": "2026-04-17T18:58:24Z",
+    "assets": [
+      {
+        "id": 88229,
+        "name": "checksums.txt",
+        "size": 1842,
+        "download_count": 147,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "6413f299-7af5-441b-bef4-8791f506b78d",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/checksums.txt"
+      },
+      {
+        "id": 88228,
+        "name": "checksums.txt.sig",
+        "size": 566,
+        "download_count": 14,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "d97b8f75-da2f-4589-b7f7-130e3f951963",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/checksums.txt.sig"
+      },
+      {
+        "id": 88247,
+        "name": "tea-0.14.0-darwin-amd64",
+        "size": 27033264,
+        "download_count": 35,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "2b0102c8-3078-4ddc-98d9-0444b8b3d864",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-amd64"
+      },
+      {
+        "id": 88245,
+        "name": "tea-0.14.0-darwin-amd64.xz",
+        "size": 7197168,
+        "download_count": 132,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "e2f6ec00-b0c1-4bde-ae21-3a00c811c365",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-amd64.xz"
+      },
+      {
+        "id": 88231,
+        "name": "tea-0.14.0-darwin-amd64.xz.sha256",
+        "size": 92,
+        "download_count": 8,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "f33a84fe-f677-490a-b27b-ecc10575ae74",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-amd64.xz.sha256"
+      },
+      {
+        "id": 88251,
+        "name": "tea-0.14.0-darwin-arm64",
+        "size": 25237586,
+        "download_count": 33,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "0224adfd-90e6-48c2-b182-d7ef86a83337",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-arm64"
+      },
+      {
+        "id": 88237,
+        "name": "tea-0.14.0-darwin-arm64.xz",
+        "size": 6366528,
+        "download_count": 139,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "37aa342c-bdb7-4266-a055-dfbac88a67fa",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-arm64.xz"
+      },
+      {
+        "id": 88234,
+        "name": "tea-0.14.0-darwin-arm64.xz.sha256",
+        "size": 92,
+        "download_count": 14,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "86aefc88-558f-46aa-8be4-ae439275b948",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-darwin-arm64.xz.sha256"
+      },
+      {
+        "id": 88246,
+        "name": "tea-0.14.0-freebsd-amd64",
+        "size": 26362028,
+        "download_count": 11,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "71792040-647e-438f-aa7b-0f84f80517fe",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-freebsd-amd64"
+      },
+      {
+        "id": 88238,
+        "name": "tea-0.14.0-freebsd-amd64.xz",
+        "size": 7088432,
+        "download_count": 6,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "0aae8977-9f79-4a3c-a4cc-d54b3418d00c",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-freebsd-amd64.xz"
+      },
+      {
+        "id": 88224,
+        "name": "tea-0.14.0-freebsd-amd64.xz.sha256",
+        "size": 93,
+        "download_count": 7,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "df4c95f7-58f1-4b5f-bb9f-dfe39e283430",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-freebsd-amd64.xz.sha256"
+      },
+      {
+        "id": 88252,
+        "name": "tea-0.14.0-linux-amd64",
+        "size": 26796194,
+        "download_count": 1373,
+        "created_at": "2026-04-17T19:09:15Z",
+        "uuid": "c18ae793-cc5b-4728-86a3-e5d65ddf05ad",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-amd64"
+      },
+      {
+        "id": 88242,
+        "name": "tea-0.14.0-linux-amd64.xz",
+        "size": 7209212,
+        "download_count": 333,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "d4dd86b4-8073-4e57-ad9a-b8b6e59fcb98",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-amd64.xz"
+      },
+      {
+        "id": 88233,
+        "name": "tea-0.14.0-linux-amd64.xz.sha256",
+        "size": 91,
+        "download_count": 89,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "52e91fe5-6454-4e55-9092-bc8de5aa604b",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-amd64.xz.sha256"
+      },
+      {
+        "id": 88254,
+        "name": "tea-0.14.0-linux-arm-5",
+        "size": 25165986,
+        "download_count": 9,
+        "created_at": "2026-04-17T19:09:15Z",
+        "uuid": "53b7d8c6-ed08-47c6-98a3-46333b8eaa6f",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-5"
+      },
+      {
+        "id": 88243,
+        "name": "tea-0.14.0-linux-arm-5.xz",
+        "size": 6377932,
+        "download_count": 5,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "6a20fa17-4428-49fe-aa43-b7f11da6c2a8",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-5.xz"
+      },
+      {
+        "id": 88235,
+        "name": "tea-0.14.0-linux-arm-5.xz.sha256",
+        "size": 91,
+        "download_count": 7,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "b1c81c04-3908-43be-814f-c451a8e84d10",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-5.xz.sha256"
+      },
+      {
+        "id": 88249,
+        "name": "tea-0.14.0-linux-arm-6",
+        "size": 25100450,
+        "download_count": 10,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "b9116b40-8af3-407b-a963-029ccd4eb1b7",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-6"
+      },
+      {
+        "id": 88244,
+        "name": "tea-0.14.0-linux-arm-6.xz",
+        "size": 6362920,
+        "download_count": 4,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "05fabe9a-292b-4f78-9515-38fd34cffa58",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-6.xz"
+      },
+      {
+        "id": 88227,
+        "name": "tea-0.14.0-linux-arm-6.xz.sha256",
+        "size": 91,
+        "download_count": 7,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "45e45b29-db4f-4b68-8ce8-7a8267242c16",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-6.xz.sha256"
+      },
+      {
+        "id": 88250,
+        "name": "tea-0.14.0-linux-arm-7",
+        "size": 25034914,
+        "download_count": 12,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "0881db84-04d5-4cfb-b29b-9b510930c61f",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-7"
+      },
+      {
+        "id": 88239,
+        "name": "tea-0.14.0-linux-arm-7.xz",
+        "size": 6355444,
+        "download_count": 4,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "cbc3aa77-9c5e-432d-b859-62086d3e1280",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-7.xz"
+      },
+      {
+        "id": 88226,
+        "name": "tea-0.14.0-linux-arm-7.xz.sha256",
+        "size": 91,
+        "download_count": 6,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "2313b390-a5cf-4f1d-90a7-ecde201e3cb7",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm-7.xz.sha256"
+      },
+      {
+        "id": 88248,
+        "name": "tea-0.14.0-linux-arm64",
+        "size": 24838306,
+        "download_count": 95,
+        "created_at": "2026-04-17T19:09:14Z",
+        "uuid": "571290ce-8905-440b-a3f7-9761411252e5",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm64"
+      },
+      {
+        "id": 88241,
+        "name": "tea-0.14.0-linux-arm64.xz",
+        "size": 6162144,
+        "download_count": 38,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "dfd724bd-bcf6-455f-9483-3835612c0e53",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm64.xz"
+      },
+      {
+        "id": 88232,
+        "name": "tea-0.14.0-linux-arm64.xz.sha256",
+        "size": 91,
+        "download_count": 8,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "f1ab116b-056c-4f50-a480-1d26fde9c1a6",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-linux-arm64.xz.sha256"
+      },
+      {
+        "id": 88253,
+        "name": "tea-0.14.0-windows-amd64.exe",
+        "size": 27309568,
+        "download_count": 283,
+        "created_at": "2026-04-17T19:09:15Z",
+        "uuid": "fa6596a3-90e8-494e-a0ff-523673f10ea1",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-amd64.exe"
+      },
+      {
+        "id": 88240,
+        "name": "tea-0.14.0-windows-amd64.exe.xz",
+        "size": 7304436,
+        "download_count": 380,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "b64392e2-1623-4db1-b67f-51f6b0c74210",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-amd64.exe.xz"
+      },
+      {
+        "id": 88230,
+        "name": "tea-0.14.0-windows-amd64.exe.xz.sha256",
+        "size": 97,
+        "download_count": 176,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "5a13fa73-ef9e-4172-9fe0-25880ba5d54d",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-amd64.exe.xz.sha256"
+      },
+      {
+        "id": 88255,
+        "name": "tea-0.14.0-windows-arm64.exe",
+        "size": 25015808,
+        "download_count": 31,
+        "created_at": "2026-04-17T19:09:15Z",
+        "uuid": "1e7e21c8-25d3-4d23-9296-5811be3e4d5c",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-arm64.exe"
+      },
+      {
+        "id": 88236,
+        "name": "tea-0.14.0-windows-arm64.exe.xz",
+        "size": 6178372,
+        "download_count": 16,
+        "created_at": "2026-04-17T19:09:12Z",
+        "uuid": "e3587dd8-46c9-43a1-9d31-b91eadffc6c9",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-arm64.exe.xz"
+      },
+      {
+        "id": 88225,
+        "name": "tea-0.14.0-windows-arm64.exe.xz.sha256",
+        "size": 97,
+        "download_count": 169,
+        "created_at": "2026-04-17T19:09:10Z",
+        "uuid": "b3e3b730-7e67-4a4b-b7e3-122f92667017",
+        "browser_download_url": "https://gitea.com/gitea/tea/releases/download/v0.14.0/tea-0.14.0-windows-arm64.exe.xz.sha256"
+      }
+    ]
+  }
+}
