@@ -57,7 +57,7 @@ def get_releases(gh_repo: str):
     }
     response = httpx.get(url, headers=headers, follow_redirects=True)
     response.raise_for_status()
-    return [GitHubRelease.validate(release) for release in response.json()] # type: ignore
+    return [GitHubRelease.model_validate(release) for release in response.json()] # type: ignore
 
 def deb_filename(name: str, version: str, arch: str):
     return f"{name}_{version}_{arch}.deb"
@@ -91,7 +91,7 @@ def unpack_file(filename: pathlib.Path, strip_components: int):
     p.check_returncode()
 
 def load_settings(config: pathlib.Path):
-    return Settings.validate(tomllib.loads(config.read_text())) # type: ignore
+    return Settings.model_validate(tomllib.loads(config.read_text())) # type: ignore
 
 
 def debian_arch(arch: str):
