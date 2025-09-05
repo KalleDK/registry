@@ -50,7 +50,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
       - name: Build APK Repo
-        uses: KalleDK/actions-apkrepo@v0.0.49
+        uses: KalleDK/actions-apkrepo@v0.0.50
         id: build_apkrepo
         with:
           pkgs_path: pkgs
