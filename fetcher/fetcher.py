@@ -26,6 +26,7 @@ class Settings(pydantic.BaseModel):
     gh_repo: str
     gh_asset_regex: str
     strip_components: int = 0
+    pkgtype: str = "deb"
 
 class GithubAsset(pydantic.BaseModel):
     url: str
@@ -62,12 +63,33 @@ def get_releases(gh_repo: str):
 def deb_filename(name: str, version: str, arch: str):
     return f"{name}_{version}_{arch}.deb"
 
-def package_releases(name: str, license: str, version: str, arch: str, description: str, url: str, maintainer: str, binaries: list[str], bindir: str, cwd: pathlib.Path):
+def apk_filename(name: str, version: str, arch: str):
+    return f"{name}-{version}-{arch}.apk"
+
+def deb_package_releases(name: str, license: str, version: str, arch: str, description: str, url: str, maintainer: str, binaries: list[str], bindir: str, cwd: pathlib.Path):
     filename = deb_filename(name, version, arch)
     subprocess.run([
         "fpm",
         "-s", "dir",
         "-t", "deb", 
+        "--name", name,
+        "--version", version,
+        "--architecture", arch,
+        "--license", license,
+        "--url", url,
+        "--maintainer", maintainer,
+        "--description", description,
+        "-p", filename,
+        *[f"{binary}={bindir}/{binary}" for binary in binaries]
+        ], cwd=cwd)
+    return cwd / filename
+
+def apk_package_releases(name: str, license: str, version: str, arch: str, description: str, url: str, maintainer: str, binaries: list[str], bindir: str, cwd: pathlib.Path):
+    filename = apk_filename(name, version, arch)
+    subprocess.run([
+        "fpm",
+        "-s", "dir",
+        "-t", "apk", 
         "--name", name,
         "--version", version,
         "--architecture", arch,
@@ -97,9 +119,18 @@ def load_settings(config: pathlib.Path):
 def debian_arch(arch: str):
     return {
         "x86_64": "amd64",
+        "i386": "i386",
         "aarch64": "arm64",
         "armv7l": "armhf",
         "armv6l": "armhf"
+    }.get(arch, arch)
+
+def apk_arch(arch: str):
+    return {
+        "x86_64": "x86_64",
+        "i386": "x86",
+        "i686": "x86",
+        "arm64": "aarch64"
     }.get(arch, arch)
 
 @contextlib.contextmanager
@@ -131,19 +162,33 @@ def main(config: pathlib.Path = pathlib.Path("fetcher.toml"), tmpdir: typing.Opt
         release = releases[0]
         asset_re = re.compile(settings.gh_asset_regex)
         assets = [asset for asset in release.assets if asset_re.match(asset.name)]
-        deb_name = deb_filename(settings.name, release.name.replace("v",""), debian_arch(settings.arch))
-        if (pathlib.Path.cwd() / deb_name).exists():
-            print(f"Package {deb_name} already exists. Skipping.")
-            return
-        for asset in assets:
-            print(f"Found asset: {asset.name}")
-            filename = base / asset.name
-            download_asset(asset, filename)
-            unpack_file(filename, settings.strip_components)
-        deb = package_releases(settings.name, settings.license, release.name.replace("v",""), debian_arch(settings.arch), settings.description, settings.url, settings.maintainer, settings.binaries, "/usr/bin", base)
-        print(f"Created package: {deb}")
-        shutil.move(deb, pathlib.Path.cwd())
-    
+        if settings.pkgtype == "deb":
+            deb_name = deb_filename(settings.name, release.name.replace("v",""), debian_arch(settings.arch))
+            if (pathlib.Path.cwd() / deb_name).exists():
+                print(f"Package {deb_name} already exists. Skipping.")
+                return
+            for asset in assets:
+                print(f"Found asset: {asset.name}")
+                filename = base / asset.name
+                download_asset(asset, filename)
+                unpack_file(filename, settings.strip_components)
+            deb = deb_package_releases(settings.name, settings.license, release.name.replace("v",""), debian_arch(settings.arch), settings.description, settings.url, settings.maintainer, settings.binaries, "/usr/bin", base)
+            print(f"Created package: {deb}")
+            shutil.move(deb, pathlib.Path.cwd())
+        if settings.pkgtype == "apk":
+            apk_name = apk_filename(settings.name, release.name.replace("v",""), apk_arch(settings.arch))
+            if (pathlib.Path.cwd() / apk_name).exists():
+                print(f"Package {apk_name} already exists. Skipping.")
+                return
+            for asset in assets:
+                print(f"Found asset: {asset.name}")
+                filename = base / asset.name
+                download_asset(asset, filename)
+                unpack_file(filename, settings.strip_components)
+            apk = apk_package_releases(settings.name, settings.license, release.name.replace("v",""), apk_arch(settings.arch), settings.description, settings.url, settings.maintainer, settings.binaries, "/usr/bin", base)
+            print(f"Created package: {apk}")
+            shutil.move(apk, pathlib.Path.cwd())
+
 
 if __name__ == "__main__":
     typer.run(main)

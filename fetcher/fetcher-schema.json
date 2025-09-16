@@ -45,6 +45,12 @@
             "type": "string",
             "description": "Regex of asset name to download",
             "examples": ["starship-x86_64-unknown-linux-gnu\\.tar\\.gz"]
+        },
+        "pkgtype": {
+            "type": "string",
+            "enum": ["deb", "apk"],
+            "default": "deb",
+            "description": "The type of package to create"
         }
     },
     "additionalProperties": false
