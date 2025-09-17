@@ -11,7 +11,7 @@ gh repo clone KalleDK/registry
 
 git checkout repo
 
-./update.sh
+task update
 
 # If any changes
 
