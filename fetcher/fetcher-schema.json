@@ -31,11 +31,6 @@
                 "type": "string"
             }
         },
-        "release": {
-            "type": "integer",
-            "default": 1,
-            "description": "The release number of the debian package"
-        },
         "gh_repo": {
             "type": "string",
             "description": "The GitHub repository to fetch data from",
@@ -46,10 +41,25 @@
             "description": "Regex of asset name to download",
             "examples": ["starship-x86_64-unknown-linux-gnu\\.tar\\.gz"]
         },
-        "pkgtype": {
-            "type": "string",
-            "enum": ["deb", "apk"],
-            "default": "deb",
+        "strip_components": {
+            "type": "integer",
+            "default": 0,
+            "description": "Number of leading path components to strip from the archive"
+        },
+        "pkgtypes": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["deb", "apk"]
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": ["deb", "apk"]
+                    }
+                }
+            ],
             "description": "The type of package to create"
         }
     },

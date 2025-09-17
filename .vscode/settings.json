@@ -1,5 +1,19 @@
 {
-    "yaml.schemas": {
-        "https://json.schemastore.org/github-workflow.json": "file:///home/km/projects/github/registry/.github/workflows/deploy.yml"
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        }
+    },
+    
+    "files.exclude": {
+        "**/.*_cache": true,
+        "**/.*py.git": true
+    },
+    "evenBetterToml.schema.associations": {
+        "fetcher.*\\.toml": "fetcher/fetcher-schema.json",
+        
     }
+    
 }

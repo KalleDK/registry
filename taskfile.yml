@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  init:
+    cmds:
+      - uv venv --clear
+      - uv pip install -r fetcher/requirements.txt
+  build:
+    dir: fetcher
+    cmds:
+      - docker build -t fetcher .
+  run:
+    cmds:
+      - docker run --rm --env GITHUB_TOKEN -v ${PWD}/pkgs:/app fetcher -a -vv

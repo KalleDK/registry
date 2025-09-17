@@ -1,0 +1,17 @@
+{
+    "name": "Alpine",
+    "image": "mcr.microsoft.com/devcontainers/base:alpine-3.20",
+    "remoteEnv": {
+        "PATH": "${containerEnv:PATH}:~/.local/bin"
+    },
+    "postCreateCommand": "echo https://dl-cdn.alpinelinux.org/alpine/edge/community | sudo tee -a /etc/apk/repositories && sudo apk update && sudo apk add curl  python3 py3-pydantic py3-rich py3-yaml py3-httpx py3-typer nfpm && curl -LsSf https://astral.sh/uv/install.sh | sh && /home/vscode/.local/bin/uv tool install ruff@latest && /home/vscode/.local/bin/uv tool install bump-my-version && sh -c \"$(curl --location https://taskfile.dev/install.sh)\" -- -d -b ~/.local/bin",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "charliermarsh.ruff",
+                "tamasfe.even-better-toml"
+            ]
+        }
+    }
+}

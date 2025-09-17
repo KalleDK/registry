@@ -1,14 +1,7 @@
-FROM debian:trixie-slim
-
-RUN apt update -q -y
-RUN apt install binutils ruby-rubygems --no-install-recommends -q -y
-RUN gem install fpm
-
-RUN apt install python3 python3-pydantic python3-httpx python3-typer --no-install-recommends -q -y
-
-COPY ./fetcher.py /usr/local/bin/fetcher
-
+FROM alpine:latest
+RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk --no-cache add python3 py3-pydantic py3-rich py3-yaml py3-httpx py3-typer nfpm
+COPY fetcher.py /usr/local/bin/fetcher
 RUN chmod +x /usr/local/bin/fetcher
-WORKDIR /app
 
-CMD ["fetcher"]
+ENTRYPOINT ["/usr/local/bin/fetcher"]
