@@ -4,4 +4,6 @@ RUN apk --no-cache add python3 py3-pydantic py3-rich py3-yaml py3-httpx py3-type
 COPY fetcher.py /usr/local/bin/fetcher
 RUN chmod +x /usr/local/bin/fetcher
 
+WORKDIR /app
+
 ENTRYPOINT ["/usr/local/bin/fetcher"]

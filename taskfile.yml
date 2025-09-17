@@ -12,4 +12,7 @@ tasks:
       - docker build -t fetcher .
   run:
     cmds:
-      - docker run --rm --env GITHUB_TOKEN -v ${PWD}/pkgs:/app fetcher -a -vv
+      - docker run --rm -i -t --env GITHUB_TOKEN -v ${PWD}:/app fetcher -a -vv
+  debug:
+    cmds:
+      - docker run --rm -i -t --env GITHUB_TOKEN -v ${PWD}:/app --entrypoint /bin/sh fetcher

@@ -535,7 +535,9 @@ def fetch_binaries(
         console.print(f"Created packages: {pkgs}")
 
     if all_pkgs:
+        print(f"Processing all packages in {path}")
         files = list(path.glob("**/fetcher*.toml"))
+        print(f"Found {len(files)} package configurations")
         for file in files:
             console.print(f"Processing {file}")
             Settings.from_file(file)  # validate settings
