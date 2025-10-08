@@ -10,6 +10,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import tomllib
 import typing
 from datetime import datetime
 from typing import Annotated
@@ -17,7 +18,6 @@ from zoneinfo import ZoneInfo
 
 import httpx
 import pydantic
-import tomllib
 import typer
 import yaml
 from rich.console import Console
@@ -376,7 +376,7 @@ class FetcherSession:
             self.settings.gh_repo, force=force
         )
         if is_cached:
-            return None
+            _log.info("No new release found, using cached version")
 
         asset = release.get_asset_by_regex(self.settings.gh_asset_regex)
         _log.info(f"Found asset: {asset.name} ({asset.size} bytes)")
