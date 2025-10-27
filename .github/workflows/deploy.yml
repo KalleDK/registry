@@ -36,7 +36,7 @@ jobs:
           repo_url: https://kalledk.github.io/registry/deb
           repo_name: kalledk
       - name: Archive DEB Repo
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: deb
           path: "${{ steps.build_debrepo.outputs.repo_path }}"
@@ -59,7 +59,7 @@ jobs:
           abuild_key_pub: ${{ vars.ABUILD_KEY_PUB }}
           abuild_repo_url: https://kalledk.github.io/registry/apk
       - name: Archive APK Repo
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: apk
           path: "${{ steps.build_apkrepo.outputs.repo_path }}"
