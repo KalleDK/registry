@@ -83,7 +83,7 @@ jobs:
           echo "* [deb](deb)" >> ./_sitesource/index.md
           echo "" >> ./_sitesource/index.md
       - name: Download repos
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: ./_sitesource/          
       - name: Setup Pages
