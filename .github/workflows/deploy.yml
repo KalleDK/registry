@@ -87,7 +87,7 @@ jobs:
         with:
           path: ./_sitesource/          
       - name: Setup Pages
-        uses: actions/configure-pages@v5.0.0
+        uses: actions/configure-pages@v6.0.0
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
