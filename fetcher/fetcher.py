@@ -9,6 +9,7 @@ import os
 import pathlib
 import re
 import shutil
+import stat
 import subprocess
 import tempfile
 import typing
@@ -486,6 +487,11 @@ def unpack(
         for line in p.stdout.decode().splitlines():
             _log.debug(f"Unpack: {line}")
         unpacked_file = path.with_suffix("")
+        current_permissions = unpacked_file.stat().st_mode
+        unpacked_file.chmod(
+            current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+        )
+
         if asset_remove_regex is not None:
             new_name = asset_remove_regex.sub("", unpacked_file.name)
             _log.debug(
