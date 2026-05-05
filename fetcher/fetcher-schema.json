@@ -31,9 +31,14 @@
                 "type": "string"
             }
         },
+        "gh_provider": {
+            "type": "string",
+            "description": "The Git provider to use for fetching data",
+            "examples": ["github", "gitea"]
+        },
         "gh_repo": {
             "type": "string",
-            "description": "The GitHub repository to fetch data from",
+            "description": "The Git repository to fetch data from",
             "examples": ["starship/starship"]
         },
         "gh_asset_regex": {

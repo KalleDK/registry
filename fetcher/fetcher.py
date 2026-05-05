@@ -2,6 +2,7 @@
 
 import contextlib
 import dataclasses
+import enum
 import http
 import logging
 import os
@@ -10,14 +11,15 @@ import re
 import shutil
 import subprocess
 import tempfile
-import tomllib
 import typing
+import uuid
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, Self
 from zoneinfo import ZoneInfo
 
 import httpx
 import pydantic
+import tomllib
 import typer
 import yaml
 from rich.console import Console
@@ -25,6 +27,11 @@ from rich.console import Console
 _log = logging.getLogger(__name__)
 
 # region Settings
+
+
+class GitProvider(enum.StrEnum):
+    GITHUB = "github"
+    GITEA = "gitea"
 
 
 class Settings(pydantic.BaseModel):
@@ -37,8 +44,10 @@ class Settings(pydantic.BaseModel):
     bindir: str = "/usr/bin"
     binaries: list[str]
     section: str | None = None
+    gh_provider: GitProvider = GitProvider.GITHUB
     gh_repo: str
     gh_asset_regex: re.Pattern[str]
+    gh_asset_remove_regex: re.Pattern[str] | None = None
     strip_components: int = 0
     pkgtypes: list[str]
     depends: list[str] = pydantic.Field(default_factory=list[str])
@@ -59,7 +68,7 @@ class Settings(pydantic.BaseModel):
             return [x.strip() for x in v.split(",")]
         return v
 
-    @pydantic.field_validator("gh_asset_regex", mode="before")
+    @pydantic.field_validator("gh_asset_regex", "gh_asset_remove_regex", mode="before")
     @classmethod
     def validate_gh_asset_regex(cls, v: str | re.Pattern[str]) -> re.Pattern[str]:
         if isinstance(v, str):
@@ -291,6 +300,125 @@ class GHClient:
         return dst
 
 
+class GiteaAsset(pydantic.BaseModel):
+    id: AssetID
+    name: str
+    size: int
+    download_count: int
+    created_at: datetime
+    uuid: uuid.UUID
+    browser_download_url: URL
+
+
+class GiteaRelease(pydantic.BaseModel):
+    url: str
+
+    id: int
+
+    tag_name: str
+    target_commitish: str
+    name: str
+    draft: bool
+
+    prerelease: bool
+    created_at: datetime
+
+    published_at: datetime
+    assets: list[GiteaAsset]
+    # tarball_url: str
+    # zipball_url: str
+    # body: str
+    # reactions: GithubReactions
+
+    def get_asset_by_regex(self, pattern: re.Pattern[str]) -> GiteaAsset:
+        assets = [a for a in self.assets if pattern.match(a.name)]
+        if len(assets) == 0:
+            raise ValueError(f"No asset found matching pattern: {pattern.pattern}")
+        if len(assets) > 1:
+            raise ValueError(
+                f"Multiple assets found matching pattern: {pattern.pattern}"
+            )
+        return assets[0]
+
+
+class GiteaCacheData[DataT](pydantic.BaseModel):
+    data: DataT
+
+
+class GiteaCacheFile[TData](pydantic.BaseModel):
+    path: pathlib.Path
+
+    def load(self, clss: type[TData]) -> GiteaCacheData[TData]:
+        return (
+            pydantic.RootModel[GiteaCacheData[clss]]
+            .model_validate_json(self.path.read_text())
+            .root
+        )
+
+    def save(self, data: GiteaCacheData[TData]):
+        self.path.write_text(data.model_dump_json(indent=2, by_alias=True))
+
+    def exists(self) -> bool:
+        return self.path.exists()
+
+
+@dataclasses.dataclass
+class GiteaClient:
+    _client: httpx.Client
+    cache: pathlib.Path
+
+    def _get_cached[TData](
+        self,
+        clss: type[TData],
+        url: str,
+        filename: str | None = None,
+        force: bool = False,
+    ) -> tuple[TData, bool]:
+        filename = filename or re.sub(r"[^a-zA-Z0-9]", "_", url)
+        cache_file = GiteaCacheFile[clss](path=self.cache / filename)
+
+        req = self._client.build_request("GET", url)
+        resp = self._client.send(req)
+        resp.raise_for_status()
+
+        data = pydantic.RootModel[clss].model_validate_json(resp.read()).root
+
+        _log.info(f"Cache miss for {url}, saving to {cache_file} [force={force}]")
+        cache_file.save(
+            GiteaCacheData[clss](
+                data=data,
+            )
+        )
+
+        return data, False
+
+    @classmethod
+    def create(cls, cache_dir: pathlib.Path) -> Self:
+        if not cache_dir.exists():
+            cache_dir.mkdir(parents=True, exist_ok=True)
+        headers = {"Accept": "application/json"}
+        client = httpx.Client(headers=headers, follow_redirects=True)
+        return cls(client, cache_dir)
+
+    def get_latest_release(
+        self, gh_repo: str, force: bool = False
+    ) -> tuple[GiteaRelease, bool]:
+        url = f"https://gitea.com/api/v1/repos/{gh_repo}/releases/latest"
+        return self._get_cached(
+            GiteaRelease,
+            url,
+            filename=f"{gh_repo.replace('/', '_')}_latest.json",
+            force=force,
+        )
+
+    def download_asset(self, asset: GiteaAsset, dir: pathlib.Path) -> pathlib.Path:
+        dst = dir / asset.name
+        response = self._client.get(asset.browser_download_url)
+        response.raise_for_status()
+        dst.write_bytes(response.content)
+        return dst
+
+
 # endregion
 
 
@@ -323,23 +451,54 @@ app = typer.Typer(help="Fetch and package binaries from GitHub releases")
 console = Console()
 
 
-def unpack(path: pathlib.Path, dest: pathlib.Path, strip_components: int = 0):
-    p = subprocess.run(
-        [
-            "tar",
-            "-xzv",
-            f"--strip-components={strip_components}",
-            "-f",
-            f"{path}",
-            "-C",
-            f"{dest}",
-        ],
-        capture_output=True,
-    )
-    p.check_returncode()
+def unpack(
+    path: pathlib.Path,
+    dest: pathlib.Path,
+    strip_components: int = 0,
+    asset_remove_regex: re.Pattern[str] | None = None,
+):
+    if path.suffixes[-2:] == [".tar", ".gz"]:
+        p = subprocess.run(
+            [
+                "tar",
+                "-xzv",
+                f"--strip-components={strip_components}",
+                "-f",
+                f"{path}",
+                "-C",
+                f"{dest}",
+            ],
+            capture_output=True,
+        )
+        p.check_returncode()
+        for line in p.stdout.decode().splitlines():
+            _log.debug(f"Unpack: {line}")
+    elif path.suffix == ".xz":
+        p = subprocess.run(
+            [
+                "xz",
+                "-d",
+                f"{path}",
+            ],
+            capture_output=True,
+        )
+        p.check_returncode()
+        for line in p.stdout.decode().splitlines():
+            _log.debug(f"Unpack: {line}")
+        unpacked_file = path.with_suffix("")
+        if asset_remove_regex is not None:
+            new_name = asset_remove_regex.sub("", unpacked_file.name)
+            _log.debug(
+                f"Renaming {unpacked_file.name} to {new_name} using regex {asset_remove_regex.pattern}"
+            )
+            unpacked_file.rename(unpacked_file.with_name(new_name))
+            unpacked_file = unpacked_file.with_name(new_name)
+        dest_file = dest / unpacked_file.name
+        unpacked_file.rename(dest_file)
+        _log.debug(f"Moved {unpacked_file} to {dest_file}")
+    else:
+        raise ValueError(f"Unsupported archive format: {path.suffixes}")
     _log.info(f"Unpacked {path} to {dest}")
-    for line in p.stdout.decode().splitlines():
-        _log.debug(f"Unpack: {line}")
 
 
 @contextlib.contextmanager
@@ -367,12 +526,17 @@ def get_arch(arch: str, target: str):
 @dataclasses.dataclass
 class FetcherSession:
     gh: GHClient
+    gitea: GiteaClient
     base: pathlib.Path
     settings: Settings
     tmpbase: pathlib.Path | None = None
 
     def build_packages(self, force: bool = False):
-        release, is_cached = self.gh.get_latest_release(
+        provider = (
+            self.gh if self.settings.gh_provider == GitProvider.GITHUB else self.gitea
+        )
+
+        release, is_cached = provider.get_latest_release(
             self.settings.gh_repo, force=force
         )
         if is_cached:
@@ -382,7 +546,9 @@ class FetcherSession:
         _log.info(f"Found asset: {asset.name} ({asset.size} bytes)")
         return self._build_packages(asset, release)
 
-    def _build_packages(self, asset: GithubAsset, release: GithubRelease):
+    def _build_packages(
+        self, asset: GithubAsset | GiteaAsset, release: GithubRelease | GiteaRelease
+    ):
         with tempdirs(dir=self.tmpbase) as tmpdir:
             # region Create skeleton
             src_dir = tmpdir / "src"
@@ -400,11 +566,19 @@ class FetcherSession:
             # endregion
 
             # Download Asset
-            asset_path = self.gh.download_asset(asset, src_dir)
+            if isinstance(asset, GithubAsset):
+                asset_path = self.gh.download_asset(asset, src_dir)
+            else:
+                asset_path = self.gitea.download_asset(asset, src_dir)
             # asset_path = src_dir / "uv-x86_64-unknown-linux-gnu.tar.gz"
 
             # Unpack Asset
-            unpack(asset_path, asset_dir, self.settings.strip_components)
+            unpack(
+                asset_path,
+                asset_dir,
+                self.settings.strip_components,
+                self.settings.gh_asset_remove_regex,
+            )
 
             # Create nFPM config
 
@@ -469,6 +643,7 @@ class FetcherSession:
 class Fetcher:
     base: pathlib.Path
     gh: GHClient
+    gitea: GiteaClient
     tmpbase: pathlib.Path | None = None
 
     @classmethod
@@ -483,11 +658,14 @@ class Fetcher:
         if token is None:
             raise ValueError("GITHUB_TOKEN environment variable not set")
         gh = GHClient.create(token, base / ".cache")
-        return cls(base, gh, tmpbase)
+        gitea = GiteaClient.create(base / ".cache")
+        return cls(base, gh, gitea, tmpbase)
 
     def build_packages(self, config: pathlib.Path, force: bool = False):
         settings = Settings.from_file(config)
-        session = FetcherSession(self.gh, config.parent, settings, self.tmpbase)
+        session = FetcherSession(
+            self.gh, self.gitea, config.parent, settings, self.tmpbase
+        )
         return session.build_packages(force=force)
 
 
