@@ -502,6 +502,22 @@ def unpack(
         dest_file = dest / unpacked_file.name
         unpacked_file.rename(dest_file)
         _log.debug(f"Moved {unpacked_file} to {dest_file}")
+    elif path.suffix == "":
+        current_permissions = path.stat().st_mode
+        path.chmod(
+            current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+        )
+
+        new_name = path.name
+        if asset_remove_regex is not None:
+            new_name = asset_remove_regex.sub("", path.name)
+            _log.debug(
+                f"Renaming {path.name} to {new_name} using regex {asset_remove_regex.pattern}"
+            )
+
+        dest_file = dest / new_name
+        path.rename(dest_file)
+        _log.debug(f"Copied {path} to {dest_file}")
     else:
         raise ValueError(f"Unsupported archive format: {path.suffixes}")
     _log.info(f"Unpacked {path} to {dest}")
